@@ -21,7 +21,7 @@ pn = int(raw_input('请输入要获取的图片数量： '))
 path = os.getcwd() + '/image/' + queryword
 
 if not os.path.exists(path):
-    os.mkdir(path)
+    os.makedirs(path)
 
 # os.chdir('./image')
 print "Images will be saved in ", path
@@ -46,8 +46,11 @@ def urlDecryption(fakeurl):
 for i in range(pn):
     url = 'http://image.baidu.com/search/acjson?tn=resultjson_com&ipn=rj&ct=201326592&is=&fp=result&cl=2&lm=-1&ie=utf-8&oe=utf-8&adpicid=&st=-1&z=0&ic=0&s=0&se=&tab=&width=&height=&face=0&istype=2&qc=&nc=1&fr=&cg=wallpaper&rn=30&gsm=30000001e&1472451656718=&' + urllib.urlencode({'queryWord': queryword, 'word': queryword, 'pn': (i+1)*30})
     print "URL： ", url
-    data = urllib2.urlopen(url).read()
-    json_data = json.loads(data)
+    try:
+    	data = urllib2.urlopen(url).read()
+    	json_data = json.loads(data)
+    except Exception, e:
+    	print "Json load error:", e
     for idx, item in enumerate(json_data['data']):
         try:
             imgurl = urlDecryption(item['objURL'])
